@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-3xl p-4 sm:p-6 flex flex-col gap-6">
+      <main className="mx-auto max-w-4xl p-4 sm:p-6 flex flex-col gap-6">
         <AnnouncementBox />
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
