@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Navbar from '@/components/Navbar';
-import AnnouncementBox from '@/components/AnnouncementBox';
-import SortTabs from '@/components/SortTabs';
-import SearchBar from '@/components/SearchBar';
-import PostButton from '@/components/PostButton';
-import PostFeed from '@/components/PostFeed';
-import PostModal from '@/components/PostModal';
-import { useState } from 'react';
+import Navbar from "@/components/Navbar";
+import AnnouncementBox from "@/components/AnnouncementBox";
+import SortTabs from "@/components/SortTabs";
+import SearchBar from "@/components/SearchBar";
+import PostButton from "@/components/PostButton";
+import PostFeed from "@/components/PostFeed";
+import PostModal from "@/components/PostModal";
+import { useState } from "react";
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,9 +19,9 @@ export default function HomePage() {
         <AnnouncementBox />
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <SearchBar />
           <SortTabs />
-          <PostButton onClick={() => setIsModalOpen(true)}/>
+          <SearchBar />
+          <PostButton onClick={() => setIsModalOpen(true)} />
         </div>
 
         <PostFeed />
