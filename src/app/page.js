@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import AnnouncementBox from '@/components/AnnouncementBox';
 import SortTabs from '@/components/SortTabs';
 import SearchBar from '@/components/SearchBar';
+import PostButton from '@/components/PostButton';
 import PostFeed from '@/components/PostFeed';
 import PostModal from '@/components/PostModal';
 import { useState } from 'react';
@@ -20,16 +21,10 @@ export default function HomePage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <SearchBar />
           <SortTabs />
+          <PostButton onClick={() => setIsModalOpen(true)}/>
         </div>
 
         <PostFeed />
-
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="self-center mt-6 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          Post your story
-        </button>
       </main>
 
       <PostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
