@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import BaseModal from "./BaseModal";
 import Comment from "@/components/comment/Comment";
+import { toggleVote, hasVoted } from "@/lib/voteUtils";
 
 export default function ViewPostModal({ isOpen, onClose, post }) {
   if (!isOpen || !post) return null;
@@ -95,8 +96,11 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                   id={comment.id}
                   content={comment.content}
                   votes={comment.votes}
-                  hasVoted={false}
-                  onVoteToggle={() => {}}
+                  hasVoted={hasVoted("comments", comment.id)}
+                  onVoteToggle={async () => {
+                    await toggleVote("comments", comment.id);
+                    fetchComments();
+                  }}
                 />
               ))}
             </div>

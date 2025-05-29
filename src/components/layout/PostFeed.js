@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Post from "@/components/post/Post";
+import { toggleVote, hasVoted } from "@/lib/voteUtils";
 
 export default function PostFeed({ onSelectPost, onMount }) {
   const [posts, setPosts] = useState([]);
@@ -72,13 +73,11 @@ export default function PostFeed({ onSelectPost, onMount }) {
           <Post
             {...post}
             comments={[]}
-            hasVoted={
-              typeof window !== "undefined" &&
-              JSON.parse(localStorage.getItem("votedPosts") || "[]").includes(
-                post.id
-              )
-            }
-            onVoteToggle={handleVoteToggle}
+            hasVoted={hasVoted("posts", post.id)}
+            onVoteToggle={async () => {
+              await toggleVote("posts", post.id);
+              fetchPosts();
+            }}
           />
         </div>
       ))}
