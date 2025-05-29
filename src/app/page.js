@@ -11,6 +11,7 @@ import ViewPostModal from "@/components/modal/ViewPostModal";
 export default function HomePage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [sort, setSort] = useState("New");
 
   const refreshPostsRef = useRef(() => {});
 
@@ -19,8 +20,13 @@ export default function HomePage() {
       <Navbar />
       <main className="mx-auto max-w-4xl p-4 sm:p-6 flex flex-col gap-6">
         <AnnouncementBox />
-        <FeedHeader onPostClick={() => setIsCreateModalOpen(true)} />
+        <FeedHeader
+          onPostClick={() => setIsCreateModalOpen(true)}
+          sort={sort}
+          setSort={setSort}
+        />
         <PostFeed
+          sort={sort}
           onSelectPost={setSelectedPost}
           onMount={(refreshFn) => (refreshPostsRef.current = refreshFn)}
         />

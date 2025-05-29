@@ -5,41 +5,66 @@ import { supabase } from "@/lib/supabaseClient";
 import Post from "@/components/post/Post";
 import { toggleVote, hasVoted } from "@/lib/voteUtils";
 
-export default function PostFeed({ onSelectPost, onMount }) {
+export default function PostFeed({ sort, onSelectPost, onMount }) {
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
-    const { data: posts, error } = await supabase
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false });
+    let query = supabase.from("posts").select("*");
 
-    if (error) {
-      console.error("Failed to load posts:", error);
+    if (sort === "New") {
+      query = query.order("created_at", { ascending: false });
+    } else if (sort === "Top") {
+      query = query.order("votes", { ascending: false });
+    } else if (sort === "Trending") {
+      const { data, error } = await supabase.from("posts").select("*");
+      if (error) return console.error(error);
+
+      const now = new Date();
+
+      const withScore = data.map((post) => {
+        const ageInHours =
+          (now - new Date(post.created_at)) / 1000 / 60 / 60 || 1;
+        const score = post.votes / ageInHours;
+        return { ...post, _score: score };
+      });
+
+      withScore.sort((a, b) => b._score - a._score);
+
+      const postsWithComments = await Promise.all(
+        withScore.map(async (post) => {
+          const { count } = await supabase
+            .from("comments")
+            .select("*", { count: "exact", head: true })
+            .eq("post_id", post.id);
+          return { ...post, commentCount: count ?? 0 };
+        })
+      );
+
+      setPosts(postsWithComments);
       return;
     }
 
-    const postsWithComments = await Promise.all(
-      posts.map(async (post) => {
-        const { count, error: countError } = await supabase
-          .from("comments")
-          .select("*", { count: "exact", head: true })
-          .eq("post_id", post.id);
-
-        return {
-          ...post,
-          commentCount: countError ? 0 : count,
-        };
-      })
-    );
-
-    setPosts(postsWithComments);
+    const { data, error } = await query;
+    if (!error) {
+      const postsWithComments = await Promise.all(
+        data.map(async (post) => {
+          const { count } = await supabase
+            .from("comments")
+            .select("*", { count: "exact", head: true })
+            .eq("post_id", post.id);
+          return { ...post, commentCount: count ?? 0 };
+        })
+      );
+      setPosts(postsWithComments);
+    } else {
+      console.error("Failed to load posts:", error);
+    }
   };
 
   useEffect(() => {
     fetchPosts();
     if (onMount) onMount(fetchPosts);
-  }, []);
+  }, [sort]);
 
   return (
     <div className="space-y-4">
