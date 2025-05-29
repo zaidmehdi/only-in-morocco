@@ -29,17 +29,27 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
         .from("comments")
         .select("*")
         .eq("post_id", postIdRef.current)
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (!error) {
         // Organize comments into top-level and replies
-        const topLevelComments = data.filter(comment => !comment.parent_id);
+        const topLevelComments = data.filter(comment => !comment.parent_id)
+          .sort((a, b) => {
+            // First sort by votes (descending - highest votes first)
+            if (b.votes !== a.votes) {
+              return b.votes - a.votes;
+            }
+            // Then sort by created_at (descending - newest first as tiebreaker)
+            return new Date(b.created_at) - new Date(a.created_at);
+          });
         const replies = data.filter(comment => comment.parent_id);
         
-        // Attach replies to their parent comments
+        // Attach replies to their parent comments, sorting replies oldest first
         const commentsWithReplies = topLevelComments.map(comment => ({
           ...comment,
-          replies: replies.filter(reply => reply.parent_id === comment.id)
+          replies: replies
+            .filter(reply => reply.parent_id === comment.id)
+            .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
         }));
         
         setComments(commentsWithReplies);
@@ -79,14 +89,24 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
       .from("comments")
       .select("*")
       .eq("post_id", post.id)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: false });
 
     if (!fetchError) {
-      const topLevelComments = data.filter(comment => !comment.parent_id);
+      const topLevelComments = data.filter(comment => !comment.parent_id)
+        .sort((a, b) => {
+          // First sort by votes (descending - highest votes first)
+          if (b.votes !== a.votes) {
+            return b.votes - a.votes;
+          }
+          // Then sort by created_at (descending - newest first as tiebreaker)
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
       const replies = data.filter(comment => comment.parent_id);
       const commentsWithReplies = topLevelComments.map(comment => ({
         ...comment,
-        replies: replies.filter(reply => reply.parent_id === comment.id)
+        replies: replies
+          .filter(reply => reply.parent_id === comment.id)
+          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
       }));
       setComments(commentsWithReplies);
     }
@@ -123,14 +143,24 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
       .from("comments")
       .select("*")
       .eq("post_id", post.id)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: false });
 
     if (!fetchError) {
-      const topLevelComments = data.filter(comment => !comment.parent_id);
+      const topLevelComments = data.filter(comment => !comment.parent_id)
+        .sort((a, b) => {
+          // First sort by votes (descending - highest votes first)
+          if (b.votes !== a.votes) {
+            return b.votes - a.votes;
+          }
+          // Then sort by created_at (descending - newest first as tiebreaker)
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
       const replies = data.filter(comment => comment.parent_id);
       const commentsWithReplies = topLevelComments.map(comment => ({
         ...comment,
-        replies: replies.filter(reply => reply.parent_id === comment.id)
+        replies: replies
+          .filter(reply => reply.parent_id === comment.id)
+          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
       }));
       setComments(commentsWithReplies);
     }
@@ -247,14 +277,24 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                           .from("comments")
                           .select("*")
                           .eq("post_id", post.id)
-                          .order("created_at", { ascending: true });
+                          .order("created_at", { ascending: false });
 
                         if (!fetchError) {
-                          const topLevelComments = data.filter(comment => !comment.parent_id);
+                          const topLevelComments = data.filter(comment => !comment.parent_id)
+                            .sort((a, b) => {
+                              // First sort by votes (descending - highest votes first)
+                              if (b.votes !== a.votes) {
+                                return b.votes - a.votes;
+                              }
+                              // Then sort by created_at (descending - newest first as tiebreaker)
+                              return new Date(b.created_at) - new Date(a.created_at);
+                            });
                           const replies = data.filter(comment => comment.parent_id);
                           const commentsWithReplies = topLevelComments.map(comment => ({
                             ...comment,
-                            replies: replies.filter(reply => reply.parent_id === comment.id)
+                            replies: replies
+                              .filter(reply => reply.parent_id === comment.id)
+                              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
                           }));
                           setComments(commentsWithReplies);
                         }
@@ -343,14 +383,24 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                                 .from("comments")
                                 .select("*")
                                 .eq("post_id", post.id)
-                                .order("created_at", { ascending: true });
+                                .order("created_at", { ascending: false });
 
                               if (!fetchError) {
-                                const topLevelComments = data.filter(comment => !comment.parent_id);
+                                const topLevelComments = data.filter(comment => !comment.parent_id)
+                                  .sort((a, b) => {
+                                    // First sort by votes (descending - highest votes first)
+                                    if (b.votes !== a.votes) {
+                                      return b.votes - a.votes;
+                                    }
+                                    // Then sort by created_at (descending - newest first as tiebreaker)
+                                    return new Date(b.created_at) - new Date(a.created_at);
+                                  });
                                 const replies = data.filter(comment => comment.parent_id);
                                 const commentsWithReplies = topLevelComments.map(comment => ({
                                   ...comment,
-                                  replies: replies.filter(reply => reply.parent_id === comment.id)
+                                  replies: replies
+                                    .filter(reply => reply.parent_id === comment.id)
+                                    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
                                 }));
                                 setComments(commentsWithReplies);
                               }
