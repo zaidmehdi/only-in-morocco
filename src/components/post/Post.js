@@ -20,10 +20,10 @@ export default function Post({
   return (
     <div
       className="
-        bg-white dark:bg-gray-800
-        border border-gray-200 dark:border-gray-700
+        bg-white
+        border border-gray-200
         rounded-md flex overflow-hidden transition
-        hover:bg-gray-50 dark:hover:bg-gray-700/70
+        hover:bg-gray-50
       "
     >
       <button
@@ -33,11 +33,11 @@ export default function Post({
         }}
         className={`
           w-12 sm:w-14 flex flex-col items-center justify-center
-          border-r border-gray-200 dark:border-gray-700 transition
+          border-r border-gray-200 transition
           ${
             hasVoted
-              ? "bg-blue-50 dark:bg-blue-900/40 text-blue-600"
-              : "bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500"
+              ? "bg-blue-50 text-blue-600"
+              : "bg-gray-50 hover:bg-gray-100 text-gray-400"
           }`}
       >
         <ChevronUpIcon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -51,7 +51,7 @@ export default function Post({
       >
         <h2
           className="font-semibold text-sm sm:text-base
-                       text-gray-900 dark:text-gray-100
+                       text-gray-900
                        pr-8 sm:pr-0 line-clamp-1 break-words"
         >
           {title}
@@ -59,7 +59,7 @@ export default function Post({
 
         <p
           className="text-xs sm:text-sm
-                      text-gray-600 dark:text-gray-300
+                      text-gray-600
                       line-clamp-1 break-words
                       pr-8 sm:pr-0"
         >
@@ -68,10 +68,10 @@ export default function Post({
 
         <div
           className="flex items-center gap-1 sm:gap-2 mt-1
-                        text-xs text-gray-500 dark:text-gray-400
+                        text-xs text-gray-500
                         pr-8 sm:pr-0 overflow-hidden"
         >
-          <span className="text-gray-700 dark:text-gray-300 font-medium truncate">
+          <span className="text-gray-700 font-medium truncate">
             {name}
           </span>
           <span className="hidden sm:inline flex-shrink-0">·</span>
@@ -90,7 +90,7 @@ export default function Post({
         <div
           className="absolute right-2 sm:right-4 bottom-2 sm:bottom-3
                         flex items-center gap-1
-                        text-xs text-gray-400 dark:text-gray-500"
+                        text-xs text-gray-400"
         >
           <ChatBubbleOvalLeftEllipsisIcon className="w-3 h-3 sm:w-4 sm:h-4" />
           <span>{commentCount}</span>
