@@ -10,6 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 export default function ViewPostModal({ isOpen, onClose, post }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [commentName, setCommentName] = useState("Anonymous");
 
   useEffect(() => {
     if (post?.id) fetchComments();
@@ -31,10 +32,13 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   const handleAddComment = async () => {
     if (!newComment.trim() || !post?.id) return;
 
+    const name = commentName.trim() || "Anonymous";
+
     const { error } = await supabase.from("comments").insert([
       {
         post_id: post.id,
         content: newComment.trim(),
+        name: name,
       },
     ]);
 
@@ -44,6 +48,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     }
 
     setNewComment("");
+    setCommentName("Anonymous");
     fetchComments();
   };
 
@@ -85,19 +90,31 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
             </h3>
           </div>
 
-          <div className="flex gap-2 mb-4">
-            <input
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
-              className="flex-1 border rounded px-3 py-2 text-sm"
-            />
-            <button
-              onClick={handleAddComment}
-              className="bg-blue-600 text-white text-sm px-3 py-2 rounded hover:bg-blue-700"
-            >
-              Comment
-            </button>
+          <div className="space-y-2 mb-4">
+            <div className="flex gap-2">
+              <input
+                value={commentName}
+                onChange={(e) => setCommentName(e.target.value)}
+                placeholder="Anonymous"
+                className="w-32 border rounded px-3 py-2 text-sm"
+                maxLength={50}
+              />
+              <input
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Write a comment..."
+                className="flex-1 border rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <p className="text-xs text-gray-500">Leave name blank to post as Anonymous</p>
+              <button
+                onClick={handleAddComment}
+                className="bg-blue-600 text-white text-sm px-3 py-2 rounded hover:bg-blue-700"
+              >
+                Comment
+              </button>
+            </div>
           </div>
 
           {comments.length > 0 ? (
@@ -108,6 +125,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                   id={comment.id}
                   content={comment.content}
                   votes={comment.votes}
+                  name={comment.name || "Anonymous"}
                   hasVoted={hasVoted("comments", comment.id)}
                   onVoteToggle={async () => {
                     await toggleVote("comments", comment.id);
