@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import AnnouncementBox from "@/components/layout/AnnouncementBox";
 import FeedHeader from "@/components/layout/FeedHeader";
 import PostFeed from "@/components/layout/PostFeed";
+import Footer from "@/components/layout/Footer";
 import CreatePostModal from "@/components/modal/CreatePostModal";
 import ViewPostModal from "@/components/modal/ViewPostModal";
 
@@ -35,6 +36,8 @@ export default function HomePage() {
           onMount={(refreshFn) => (refreshPostsRef.current = refreshFn)}
         />
       </main>
+
+      <Footer />
 
       <CreatePostModal
         isOpen={isCreateModalOpen}
