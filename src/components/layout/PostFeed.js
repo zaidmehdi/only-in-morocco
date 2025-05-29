@@ -1,30 +1,32 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import Post from "@/components/post/Post";
 
-export default function PostFeed({ onSelectPost }) {
-  const posts = [
-    {
-      id: 1,
-      title: "test",
-      body: "test",
-      votes: 38,
-      date: "11 hours ago",
-      comments: [],
-    },
-    {
-      id: 2,
-      title: "test",
-      body: "test again",
-      votes: 3,
-      date: "11 hours ago",
-      comments: ["Exactly my thoughts", "This needs more visibility"],
-    },
-  ];
+export default function PostFeed({ onSelectPost, onMount }) {
+  const [posts, setPosts] = useState([]);
+
+  const fetchPosts = async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error) setPosts(data);
+    else console.error("Failed to load posts:", error);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+    if (onMount) onMount(fetchPosts);
+  }, []);
 
   return (
-    <div>
+    <div className="space-y-4">
       {posts.map((post) => (
         <div key={post.id} onClick={() => onSelectPost(post)}>
-          <Post {...post} />
+          <Post {...post} comments={[]} />
         </div>
       ))}
     </div>

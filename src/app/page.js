@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import AnnouncementBox from "@/components/layout/AnnouncementBox";
 import FeedHeader from "@/components/layout/FeedHeader";
@@ -12,18 +12,26 @@ export default function HomePage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const refreshPostsRef = useRef(() => {});
+
   return (
     <>
       <Navbar />
       <main className="mx-auto max-w-4xl p-4 sm:p-6 flex flex-col gap-6">
         <AnnouncementBox />
         <FeedHeader onPostClick={() => setIsCreateModalOpen(true)} />
-        <PostFeed onSelectPost={setSelectedPost} />
+        <PostFeed
+          onSelectPost={setSelectedPost}
+          onMount={(refreshFn) => (refreshPostsRef.current = refreshFn)}
+        />
       </main>
 
       <CreatePostModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={() => {
+          setIsCreateModalOpen(false);
+          refreshPostsRef.current();
+        }}
       />
 
       <ViewPostModal
