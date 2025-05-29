@@ -18,6 +18,13 @@ export default function PostFeed({ onSelectPost, onMount }) {
   };
 
   const handleVote = async (postId) => {
+    const votedPosts = JSON.parse(localStorage.getItem("votedPosts") || "[]");
+
+    if (votedPosts.includes(postId)) {
+      console.log("Already voted on this post.");
+      return;
+    }
+
     const { data, error } = await supabase
       .from("posts")
       .select("votes")
@@ -36,9 +43,12 @@ export default function PostFeed({ onSelectPost, onMount }) {
 
     if (updateError) {
       console.error("Failed to update votes:", updateError);
-    } else {
-      fetchPosts();
+      return;
     }
+
+    localStorage.setItem("votedPosts", JSON.stringify([...votedPosts, postId]));
+
+    fetchPosts();
   };
 
   useEffect(() => {
