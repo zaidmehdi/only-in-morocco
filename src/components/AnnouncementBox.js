@@ -1,6 +1,6 @@
 export default function AnnouncementBox() {
   return (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+    <div className="bg-red-50 border border-red-200 rounded-lg p-6">
       <h2 className="text-lg font-semibold text-red-900 mb-3">
         Tell your 🇲🇦 Morocco story
       </h2>
