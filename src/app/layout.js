@@ -7,8 +7,9 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Only In X",
-  description: "Stories that can only happen here.",
+  title: "Only In Morocco",
+  description: "Stories that can only happen in Morocco.",
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({ children }) {

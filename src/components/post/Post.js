@@ -24,33 +24,33 @@ export default function Post({
           e.stopPropagation();
           onVoteToggle?.(id, hasVoted);
         }}
-        className={`w-14 flex flex-col items-center justify-center border-r border-gray-200 transition ${
+        className={`w-12 sm:w-14 flex flex-col items-center justify-center border-r border-gray-200 transition ${
           hasVoted ? "bg-blue-50 text-blue-600" : "bg-gray-50 hover:bg-gray-100"
         }`}
       >
-        <ChevronUpIcon className="w-5 h-5" />
-        <span className="text-sm font-medium">{votes}</span>
+        <ChevronUpIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+        <span className="text-xs sm:text-sm font-medium">{votes}</span>
       </button>
 
-      <div className="flex flex-col gap-1 w-full px-4 py-3 relative">
-        <h2 className="font-semibold text-base text-gray-900">{title}</h2>
-        <p className="text-sm text-gray-600 line-clamp-2">{body}</p>
+      <div className="flex flex-col gap-1 w-full px-3 sm:px-4 py-2 sm:py-3 relative min-h-[80px] sm:min-h-[90px]">
+        <h2 className="font-semibold text-sm sm:text-base text-gray-900 pr-8 sm:pr-0 line-clamp-1">{title}</h2>
+        <p className="text-xs sm:text-sm text-gray-600 line-clamp-1 pr-8 sm:pr-0">{body}</p>
 
-        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-          <span className="text-gray-700 font-medium">{name}</span>
-          <span>·</span>
-          <span role="img">🇲🇦</span>
-          <span>Morocco</span>
-          <span>·</span>
-          <span>
+        <div className="flex items-center gap-1 sm:gap-2 mt-1 text-xs text-gray-500 pr-8 sm:pr-0 overflow-hidden">
+          <span className="text-gray-700 font-medium truncate">{name}</span>
+          <span className="hidden sm:inline flex-shrink-0">·</span>
+          <span role="img" className="hidden sm:inline flex-shrink-0">🇲🇦</span>
+          <span className="hidden sm:inline flex-shrink-0">Morocco</span>
+          <span className="hidden sm:inline flex-shrink-0">·</span>
+          <span className="flex-shrink-0">
             {time
               ? formatDistanceToNow(new Date(time), { addSuffix: true })
               : "some time ago"}
           </span>
         </div>
 
-        <div className="absolute right-4 bottom-3 flex items-center gap-1 text-xs text-gray-400">
-          <ChatBubbleOvalLeftEllipsisIcon className="w-4 h-4" />
+        <div className="absolute right-2 sm:right-4 bottom-2 sm:bottom-3 flex items-center gap-1 text-xs text-gray-400">
+          <ChatBubbleOvalLeftEllipsisIcon className="w-3 h-3 sm:w-4 sm:h-4" />
           <span>{commentCount}</span>
         </div>
       </div>

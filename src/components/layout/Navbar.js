@@ -12,12 +12,12 @@ export default function Navbar() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="px-4 bg-white border-b border-gray-100/40 dark:border-gray-700 dark:bg-gray-900 md:px-6 xl:px-0 pb-4">
-      <div className="max-w-5xl py-4 pb-0 mx-auto">
+    <div className="px-3 sm:px-4 bg-white border-b border-gray-100/40 dark:border-gray-700 dark:bg-gray-900 md:px-6 xl:px-0 pb-3 sm:pb-4">
+      <div className="max-w-5xl py-3 sm:py-4 pb-0 mx-auto">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center flex-1 w-full mr-3 truncate">
+          <div className="inline-flex items-center flex-1 w-full mr-2 sm:mr-3 truncate">
             <div className="inline-flex items-center max-w-full truncate">
-              <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mr-2 overflow-hidden rounded-full border sm:h-9 sm:w-9 dark:bg-gray-800 dark:border-gray-600">
+              <div className="flex items-center justify-center flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 mr-2 overflow-hidden rounded-full border sm:h-9 sm:w-9 dark:bg-gray-800 dark:border-gray-600">
                 <span className="inline-block overflow-hidden relative max-w-full">
                   <span className="block max-w-full">
                     <Image
@@ -43,16 +43,16 @@ export default function Navbar() {
               </h2>
             </div>
           </div>
-          <div className="flex items-center flex-shrink-0 space-x-3 sm:space-x-4">
+          <div className="flex items-center flex-shrink-0 space-x-2 sm:space-x-3 sm:space-x-4">
             {mounted && (
               <button
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="h-9 w-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
               >
                 {theme === "dark" ? (
-                  <SunIcon className="h-5 w-5 text-yellow-400" />
+                  <SunIcon className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
                 ) : (
-                  <MoonIcon className="h-5 w-5 text-gray-800" />
+                  <MoonIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-800" />
                 )}
               </button>
             )}

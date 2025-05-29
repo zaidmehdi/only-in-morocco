@@ -37,11 +37,11 @@ export default function CreatePostModal({ isOpen, onClose }) {
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} maxWidth="max-w-lg">
-      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+      <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
         🇲🇦 Share your Morocco story
       </h2>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
         <div>
           <label className="block text-sm font-medium mb-1">
             Name
@@ -77,25 +77,25 @@ export default function CreatePostModal({ isOpen, onClose }) {
           <textarea
             name="body"
             placeholder="Tell us what happened..."
-            className="w-full border rounded px-3 py-2 text-sm h-32 resize-none outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border rounded px-3 py-2 text-sm h-28 sm:h-32 resize-none outline-none focus:ring-2 focus:ring-blue-500"
             maxLength={2000}
           />
         </div>
 
         {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-3 sm:mt-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+            className="px-4 py-2 text-sm border rounded hover:bg-gray-50 order-2 sm:order-1"
             disabled={loading}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 text-sm bg-rose-500 text-white rounded hover:bg-rose-600"
+            className="px-4 py-2 text-sm bg-rose-500 text-white rounded hover:bg-rose-600 order-1 sm:order-2"
             disabled={loading}
           >
             {loading ? "Posting..." : "Post Story"}

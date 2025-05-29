@@ -12,9 +12,11 @@ export default function FeedHeader({
   setSearchQuery,
 }) {
   return (
-    <div className="flex justify-between gap-3">
-      <SortTabs activeTab={sort} onChange={setSort} />
-      <SearchBar value={searchQuery} onChange={setSearchQuery} />
+    <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-3">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 flex-1">
+        <SortTabs activeTab={sort} onChange={setSort} />
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+      </div>
       <PostButton onClick={onPostClick} />
     </div>
   );

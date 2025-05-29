@@ -38,17 +38,17 @@ export default function BaseModal({
     <div
       ref={overlayRef}
       onClick={handleClickOutside}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4 py-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-2 sm:px-4 py-2 sm:py-4"
     >
       <div
-        className={`bg-white rounded-md shadow-lg w-full ${maxWidth} max-h-[90vh] flex flex-col`}
+        className={`bg-white rounded-md shadow-lg w-full ${maxWidth} max-h-[95vh] sm:max-h-[90vh] flex flex-col`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Fixed header with close button */}
-        <div className="flex-shrink-0 p-6 pb-0 relative">
+        <div className="flex-shrink-0 p-4 sm:p-6 pb-0 relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"
+            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-gray-600 z-10 text-xl sm:text-base"
             aria-label="Close modal"
           >
             &times;
@@ -56,7 +56,7 @@ export default function BaseModal({
         </div>
         
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 pb-4 sm:pb-6">
           {children}
         </div>
       </div>

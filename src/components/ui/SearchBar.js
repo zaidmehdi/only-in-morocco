@@ -2,7 +2,7 @@
 
 export default function SearchBar({ value, onChange }) {
   return (
-    <div className="relative flex-1 sm:w-64">
+    <div className="relative flex-1 sm:flex-1 md:w-64">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

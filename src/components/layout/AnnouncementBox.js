@@ -1,11 +1,11 @@
 export default function AnnouncementBox() {
   return (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-      <h2 className="text-lg font-semibold text-red-900 mb-3">
+    <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+      <h2 className="text-base sm:text-lg font-semibold text-red-900 mb-2 sm:mb-3">
         Tell your 🇲🇦 Morocco story
       </h2>
 
-      <div className="space-y-4 text-sm text-red-800">
+      <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-red-800">
         <p>
           We love the first whiff of sizzling sardines, the café buzz on every
           corner, and that moment when the Atlas mountains peek through the

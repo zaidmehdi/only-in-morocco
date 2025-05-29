@@ -14,7 +14,7 @@ const tabs = [
 
 export default function SortTabs({ activeTab, onChange }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-shrink-0">
       {tabs.map(({ name, icon: Icon }) => {
         const isActive = activeTab === name;
         return (

@@ -192,15 +192,15 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-2">{post.title}</h2>
           <p className="text-sm text-gray-700 whitespace-pre-line">
             {post.body}
           </p>
         </div>
 
-        <div className="flex items-center text-sm text-gray-500 gap-4">
+        <div className="flex items-center text-xs sm:text-sm text-gray-500 gap-2 sm:gap-4 flex-wrap">
           <div>
             <span className="text-gray-700 font-medium">{post.name || "Anonymous"}</span>
           </div>
@@ -227,12 +227,12 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
           </div>
 
           <div className="space-y-2 mb-4">
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 value={commentName}
                 onChange={(e) => setCommentName(e.target.value)}
                 placeholder="Anonymous"
-                className="w-32 border rounded px-3 py-2 text-sm"
+                className="w-full sm:w-32 border rounded px-3 py-2 text-sm"
                 maxLength={50}
               />
               <input
@@ -242,11 +242,11 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                 className="flex-1 border rounded px-3 py-2 text-sm"
               />
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <p className="text-xs text-gray-500">Leave name blank to post as Anonymous</p>
               <button
                 onClick={handleAddComment}
-                className="bg-blue-600 text-white text-sm px-3 py-2 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white text-sm px-3 py-2 rounded hover:bg-blue-700 self-end sm:self-auto"
               >
                 Comment
               </button>
@@ -304,7 +304,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                     
                     {/* Show/Hide replies toggle */}
                     {hasReplies && (
-                      <div className="ml-12">
+                      <div className="ml-8 sm:ml-12">
                         <button
                           onClick={() => toggleReplies(comment.id)}
                           className="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
@@ -326,13 +326,13 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                     
                     {/* Reply form for this comment */}
                     {replyingTo === comment.id && (
-                      <div className="ml-8 space-y-2 p-3 bg-gray-50 rounded border">
-                        <div className="flex gap-2">
+                      <div className="ml-4 sm:ml-8 space-y-2 p-3 bg-gray-50 rounded border">
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <input
                             value={replyName}
                             onChange={(e) => setReplyName(e.target.value)}
                             placeholder="Anonymous"
-                            className="w-32 border rounded px-2 py-1 text-sm"
+                            className="w-full sm:w-32 border rounded px-2 py-1 text-sm"
                             maxLength={50}
                           />
                           <input
@@ -343,9 +343,9 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                             autoFocus
                           />
                         </div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                           <p className="text-xs text-gray-500">Replying to {comment.name || "Anonymous"}</p>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 self-end sm:self-auto">
                             <button
                               onClick={cancelReply}
                               className="text-xs px-2 py-1 text-gray-600 hover:text-gray-800"

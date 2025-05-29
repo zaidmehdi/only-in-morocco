@@ -19,7 +19,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl p-4 sm:p-6 flex flex-col gap-6">
+      <main className="mx-auto max-w-4xl p-3 sm:p-4 md:p-6 flex flex-col gap-4 sm:gap-6">
         <AnnouncementBox />
         <FeedHeader
           onPostClick={() => setIsCreateModalOpen(true)}

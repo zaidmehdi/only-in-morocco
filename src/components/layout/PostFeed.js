@@ -42,7 +42,7 @@ export default function PostFeed({
       query = query.range(startRange, endRange);
 
       const { data, error } = await query;
-      
+
       if (error) {
         console.error("Failed to load posts:", error);
         setLoading(false);
@@ -63,12 +63,11 @@ export default function PostFeed({
       if (isNewSearch || pageNum === 0) {
         setPosts(postsWithComments);
       } else {
-        setPosts(prev => [...prev, ...postsWithComments]);
+        setPosts((prev) => [...prev, ...postsWithComments]);
       }
 
       // Check if we have more posts
       setHasMore(postsWithComments.length === POSTS_PER_PAGE);
-      
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -85,28 +84,32 @@ export default function PostFeed({
   }, [page, hasMore, loading]);
 
   // Intersection Observer for infinite scroll
-  const lastPostElementRef = useCallback(node => {
-    if (loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        loadMore();
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore, loadMore]);
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore, loadMore]
+  );
 
   useEffect(() => {
     setPage(0);
     setPosts([]);
     setHasMore(true);
     fetchPosts(0, true);
-    if (onMount) onMount(() => {
-      setPage(0);
-      setPosts([]);
-      setHasMore(true);
-      fetchPosts(0, true);
-    });
+    if (onMount)
+      onMount(() => {
+        setPage(0);
+        setPosts([]);
+        setHasMore(true);
+        fetchPosts(0, true);
+      });
   }, [sort]);
 
   const filteredPosts = posts.filter((post) => {
@@ -121,8 +124,8 @@ export default function PostFeed({
   return (
     <div className="space-y-4">
       {filteredPosts.map((post, index) => (
-        <div 
-          key={post.id} 
+        <div
+          key={post.id}
           onClick={() => onSelectPost(post)}
           ref={index === filteredPosts.length - 1 ? lastPostElementRef : null}
         >
@@ -143,7 +146,7 @@ export default function PostFeed({
           />
         </div>
       ))}
-      
+
       {loading && (
         <div className="flex justify-center py-8">
           <div className="flex items-center space-x-2 text-gray-500">
@@ -152,13 +155,13 @@ export default function PostFeed({
           </div>
         </div>
       )}
-      
+
       {!hasMore && posts.length > 0 && (
         <div className="text-center py-8 text-gray-500">
-          <p>You&apos;ve reached the end! 🎉</p>
+          <p>You&apos;ve reached the end! 🇲🇦</p>
         </div>
       )}
-      
+
       {!loading && posts.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No posts found.</p>
