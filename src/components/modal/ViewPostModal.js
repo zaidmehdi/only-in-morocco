@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import BaseModal from "./BaseModal";
 import Comment from "@/components/comment/Comment";
@@ -15,36 +15,43 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   const [replyContent, setReplyContent] = useState("");
   const [replyName, setReplyName] = useState("Anonymous");
   const [expandedComments, setExpandedComments] = useState(new Set());
+  const postIdRef = useRef(post?.id);
 
-  const fetchComments = useCallback(async () => {
-    if (!post?.id) return;
-    
-    const { data, error } = await supabase
-      .from("comments")
-      .select("*")
-      .eq("post_id", post.id)
-      .order("created_at", { ascending: true });
-
-    if (!error) {
-      // Organize comments into top-level and replies
-      const topLevelComments = data.filter(comment => !comment.parent_id);
-      const replies = data.filter(comment => comment.parent_id);
-      
-      // Attach replies to their parent comments
-      const commentsWithReplies = topLevelComments.map(comment => ({
-        ...comment,
-        replies: replies.filter(reply => reply.parent_id === comment.id)
-      }));
-      
-      setComments(commentsWithReplies);
-    } else {
-      console.error("Failed to load comments:", error);
-    }
+  useEffect(() => {
+    postIdRef.current = post?.id;
   }, [post?.id]);
 
   useEffect(() => {
-    if (post?.id) fetchComments();
-  }, [post?.id, fetchComments]);
+    async function fetchComments() {
+      if (!postIdRef.current) return;
+      
+      const { data, error } = await supabase
+        .from("comments")
+        .select("*")
+        .eq("post_id", postIdRef.current)
+        .order("created_at", { ascending: true });
+
+      if (!error) {
+        // Organize comments into top-level and replies
+        const topLevelComments = data.filter(comment => !comment.parent_id);
+        const replies = data.filter(comment => comment.parent_id);
+        
+        // Attach replies to their parent comments
+        const commentsWithReplies = topLevelComments.map(comment => ({
+          ...comment,
+          replies: replies.filter(reply => reply.parent_id === comment.id)
+        }));
+        
+        setComments(commentsWithReplies);
+      } else {
+        console.error("Failed to load comments:", error);
+      }
+    }
+
+    if (post?.id) {
+      fetchComments();
+    }
+  }, [post?.id]);
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !post?.id) return;
@@ -67,7 +74,22 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
 
     setNewComment("");
     setCommentName("Anonymous");
-    fetchComments();
+    // Fetch comments again
+    const { data, error: fetchError } = await supabase
+      .from("comments")
+      .select("*")
+      .eq("post_id", post.id)
+      .order("created_at", { ascending: true });
+
+    if (!fetchError) {
+      const topLevelComments = data.filter(comment => !comment.parent_id);
+      const replies = data.filter(comment => comment.parent_id);
+      const commentsWithReplies = topLevelComments.map(comment => ({
+        ...comment,
+        replies: replies.filter(reply => reply.parent_id === comment.id)
+      }));
+      setComments(commentsWithReplies);
+    }
   };
 
   const handleAddReply = async () => {
@@ -96,7 +118,22 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     // Auto-expand the comment that was replied to
     setExpandedComments(prev => new Set([...prev, replyingTo]));
     
-    fetchComments();
+    // Fetch comments again
+    const { data, error: fetchError } = await supabase
+      .from("comments")
+      .select("*")
+      .eq("post_id", post.id)
+      .order("created_at", { ascending: true });
+
+    if (!fetchError) {
+      const topLevelComments = data.filter(comment => !comment.parent_id);
+      const replies = data.filter(comment => comment.parent_id);
+      const commentsWithReplies = topLevelComments.map(comment => ({
+        ...comment,
+        replies: replies.filter(reply => reply.parent_id === comment.id)
+      }));
+      setComments(commentsWithReplies);
+    }
   };
 
   const handleReply = (commentId) => {
@@ -205,7 +242,22 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                       hasVoted={hasVoted("comments", comment.id)}
                       onVoteToggle={async () => {
                         await toggleVote("comments", comment.id);
-                        fetchComments();
+                        // Fetch comments again
+                        const { data, error: fetchError } = await supabase
+                          .from("comments")
+                          .select("*")
+                          .eq("post_id", post.id)
+                          .order("created_at", { ascending: true });
+
+                        if (!fetchError) {
+                          const topLevelComments = data.filter(comment => !comment.parent_id);
+                          const replies = data.filter(comment => comment.parent_id);
+                          const commentsWithReplies = topLevelComments.map(comment => ({
+                            ...comment,
+                            replies: replies.filter(reply => reply.parent_id === comment.id)
+                          }));
+                          setComments(commentsWithReplies);
+                        }
                       }}
                       onReply={handleReply}
                     />
@@ -286,7 +338,22 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                             hasVoted={hasVoted("comments", reply.id)}
                             onVoteToggle={async () => {
                               await toggleVote("comments", reply.id);
-                              fetchComments();
+                              // Fetch comments again
+                              const { data, error: fetchError } = await supabase
+                                .from("comments")
+                                .select("*")
+                                .eq("post_id", post.id)
+                                .order("created_at", { ascending: true });
+
+                              if (!fetchError) {
+                                const topLevelComments = data.filter(comment => !comment.parent_id);
+                                const replies = data.filter(comment => comment.parent_id);
+                                const commentsWithReplies = topLevelComments.map(comment => ({
+                                  ...comment,
+                                  replies: replies.filter(reply => reply.parent_id === comment.id)
+                                }));
+                                setComments(commentsWithReplies);
+                              }
                             }}
                             // No onReply for replies (flat structure)
                           />
