@@ -155,7 +155,7 @@ export default function PostFeed({
       
       {!hasMore && posts.length > 0 && (
         <div className="text-center py-8 text-gray-500">
-          <p>You've reached the end! 🎉</p>
+          <p>You&apos;ve reached the end! 🎉</p>
         </div>
       )}
       

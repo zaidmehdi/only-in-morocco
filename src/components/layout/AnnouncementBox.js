@@ -14,13 +14,13 @@ export default function AnnouncementBox() {
         <p>
           But there are also those times: the four-hour wait for a five-minute
           task, the paperwork that needs a copy of a copy of a stamp, and the
-          taxi that claims the meter is "on vacation." We have laughed,
-          face-palmed, and heard the classic line, "Relax, it’s part of the
-          adventure."
+          taxi that claims the meter is &ldquo;on vacation.&rdquo; We have laughed,
+          face-palmed, and heard the classic line, &ldquo;Relax, it&apos;s part of the
+          adventure.&rdquo;
         </p>
         <p>
           That is why we built this spot: a comfy, anonymous place to swap the
-          good, the bad, and the “you won’t believe this” moments of life in
+          good, the bad, and the &ldquo;you won&apos;t believe this&rdquo; moments of life in
           Morocco. Stack them all together and we might see what works, what
           does not, and what needs a gentle nudge.
         </p>
@@ -37,7 +37,7 @@ export default function AnnouncementBox() {
           </p>
         </div>
         <p className="italic">
-          So pour yourself a mint tea, settle in, and tell us: what’s your
+          So pour yourself a mint tea, settle in, and tell us: what&apos;s your
           Morocco story?
         </p>
       </div>
