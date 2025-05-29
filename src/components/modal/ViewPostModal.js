@@ -11,6 +11,9 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [commentName, setCommentName] = useState("Anonymous");
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [replyContent, setReplyContent] = useState("");
+  const [replyName, setReplyName] = useState("Anonymous");
 
   useEffect(() => {
     if (post?.id) fetchComments();
@@ -25,8 +28,21 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
       .eq("post_id", post.id)
       .order("created_at", { ascending: true });
 
-    if (!error) setComments(data);
-    else console.error("Failed to load comments:", error);
+    if (!error) {
+      // Organize comments into top-level and replies
+      const topLevelComments = data.filter(comment => !comment.parent_id);
+      const replies = data.filter(comment => comment.parent_id);
+      
+      // Attach replies to their parent comments
+      const commentsWithReplies = topLevelComments.map(comment => ({
+        ...comment,
+        replies: replies.filter(reply => reply.parent_id === comment.id)
+      }));
+      
+      setComments(commentsWithReplies);
+    } else {
+      console.error("Failed to load comments:", error);
+    }
   };
 
   const handleAddComment = async () => {
@@ -39,6 +55,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
         post_id: post.id,
         content: newComment.trim(),
         name: name,
+        parent_id: null, // Top-level comment
       },
     ]);
 
@@ -50,6 +67,41 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     setNewComment("");
     setCommentName("Anonymous");
     fetchComments();
+  };
+
+  const handleAddReply = async () => {
+    if (!replyContent.trim() || !replyingTo || !post?.id) return;
+
+    const name = replyName.trim() || "Anonymous";
+
+    const { error } = await supabase.from("comments").insert([
+      {
+        post_id: post.id,
+        content: replyContent.trim(),
+        name: name,
+        parent_id: replyingTo,
+      },
+    ]);
+
+    if (error) {
+      console.error("Failed to add reply:", error);
+      return;
+    }
+
+    setReplyContent("");
+    setReplyName("Anonymous");
+    setReplyingTo(null);
+    fetchComments();
+  };
+
+  const handleReply = (commentId) => {
+    setReplyingTo(commentId);
+  };
+
+  const cancelReply = () => {
+    setReplyingTo(null);
+    setReplyContent("");
+    setReplyName("Anonymous");
   };
 
   if (!isOpen || !post) return null;
@@ -118,21 +170,87 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
           </div>
 
           {comments.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {comments.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  id={comment.id}
-                  content={comment.content}
-                  votes={comment.votes}
-                  name={comment.name || "Anonymous"}
-                  time={comment.created_at}
-                  hasVoted={hasVoted("comments", comment.id)}
-                  onVoteToggle={async () => {
-                    await toggleVote("comments", comment.id);
-                    fetchComments();
-                  }}
-                />
+                <div key={comment.id} className="space-y-2">
+                  {/* Top-level comment */}
+                  <Comment
+                    id={comment.id}
+                    content={comment.content}
+                    votes={comment.votes}
+                    name={comment.name || "Anonymous"}
+                    time={comment.created_at}
+                    parent_id={comment.parent_id}
+                    hasVoted={hasVoted("comments", comment.id)}
+                    onVoteToggle={async () => {
+                      await toggleVote("comments", comment.id);
+                      fetchComments();
+                    }}
+                    onReply={handleReply}
+                  />
+                  
+                  {/* Reply form for this comment */}
+                  {replyingTo === comment.id && (
+                    <div className="ml-8 space-y-2 p-3 bg-gray-50 rounded border">
+                      <div className="flex gap-2">
+                        <input
+                          value={replyName}
+                          onChange={(e) => setReplyName(e.target.value)}
+                          placeholder="Anonymous"
+                          className="w-32 border rounded px-2 py-1 text-sm"
+                          maxLength={50}
+                        />
+                        <input
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                          placeholder="Write a reply..."
+                          className="flex-1 border rounded px-2 py-1 text-sm"
+                          autoFocus
+                        />
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-xs text-gray-500">Replying to {comment.name || "Anonymous"}</p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={cancelReply}
+                            className="text-xs px-2 py-1 text-gray-600 hover:text-gray-800"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleAddReply}
+                            className="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700"
+                          >
+                            Reply
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Replies to this comment */}
+                  {comment.replies && comment.replies.length > 0 && (
+                    <div className="space-y-2">
+                      {comment.replies.map((reply) => (
+                        <Comment
+                          key={reply.id}
+                          id={reply.id}
+                          content={reply.content}
+                          votes={reply.votes}
+                          name={reply.name || "Anonymous"}
+                          time={reply.created_at}
+                          parent_id={reply.parent_id}
+                          hasVoted={hasVoted("comments", reply.id)}
+                          onVoteToggle={async () => {
+                            await toggleVote("comments", reply.id);
+                            fetchComments();
+                          }}
+                          // No onReply for replies (flat structure)
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           ) : (

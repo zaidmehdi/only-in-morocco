@@ -9,11 +9,15 @@ export default function Comment({
   votes,
   name = "Anonymous",
   time,
+  parent_id,
   onVoteToggle,
+  onReply,
   hasVoted,
 }) {
+  const isTopLevel = !parent_id;
+
   return (
-    <div className="flex border border-gray-200 rounded-md overflow-hidden text-sm bg-white">
+    <div className={`flex border border-gray-200 rounded-md overflow-hidden text-sm bg-white ${!isTopLevel ? 'ml-8' : ''}`}>
       <button
         onClick={() => onVoteToggle?.(id, hasVoted)}
         className={`w-12 flex flex-col items-center justify-center border-r border-gray-200 transition ${
@@ -34,7 +38,16 @@ export default function Comment({
               : "some time ago"}
           </span>
         </div>
-        <div className="text-gray-800">{content}</div>
+        <div className="text-gray-800 mb-2">{content}</div>
+        
+        {isTopLevel && onReply && (
+          <button
+            onClick={() => onReply(id)}
+            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+          >
+            Reply
+          </button>
+        )}
       </div>
     </div>
   );
