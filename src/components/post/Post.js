@@ -38,7 +38,9 @@ export default function Post({
           <span>Morocco</span>
           <span>·</span>
           <span>
-            {formatDistanceToNow(new Date(time), { addSuffix: true })}{" "}
+            {time
+              ? formatDistanceToNow(new Date(time), { addSuffix: true })
+              : "some time ago"}
           </span>
         </div>
 

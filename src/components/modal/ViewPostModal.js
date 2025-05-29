@@ -64,9 +64,11 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
           </div>
           <div>
             <span className="text-gray-700">
-              {formatDistanceToNow(new Date(post.created_at), {
-                addSuffix: true,
-              })}
+              {post.created_at
+                ? formatDistanceToNow(new Date(post.created_at), {
+                    addSuffix: true,
+                  })
+                : "some time ago"}
             </span>
           </div>
         </div>
