@@ -10,19 +10,22 @@ export default function Post({
   votes,
   time,
   comments = [],
-  onVote,
+  onVoteToggle,
+  hasVoted,
 }) {
   return (
     <div className="border border-gray-200 rounded-md flex overflow-hidden transition hover:bg-gray-50">
       <button
         onClick={(e) => {
           e.stopPropagation();
-          onVote?.(id);
+          onVoteToggle?.(id, hasVoted);
         }}
-        className="w-14 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 border-r border-gray-200"
+        className={`w-14 flex flex-col items-center justify-center border-r border-gray-200 transition ${
+          hasVoted ? "bg-blue-50 text-blue-600" : "bg-gray-50 hover:bg-gray-100"
+        }`}
       >
-        <ChevronUpIcon className="w-5 h-5 text-gray-600" />
-        <span className="text-sm font-medium text-gray-700">{votes}</span>
+        <ChevronUpIcon className="w-5 h-5" />
+        <span className="text-sm font-medium">{votes}</span>
       </button>
 
       <div className="flex flex-col gap-1 w-full px-4 py-3 relative">

@@ -17,13 +17,8 @@ export default function PostFeed({ onSelectPost, onMount }) {
     else console.error("Failed to load posts:", error);
   };
 
-  const handleVote = async (postId) => {
+  const handleVoteToggle = async (postId, hasVoted) => {
     const votedPosts = JSON.parse(localStorage.getItem("votedPosts") || "[]");
-
-    if (votedPosts.includes(postId)) {
-      console.log("Already voted on this post.");
-      return;
-    }
 
     const { data, error } = await supabase
       .from("posts")
@@ -31,22 +26,36 @@ export default function PostFeed({ onSelectPost, onMount }) {
       .eq("id", postId)
       .single();
 
-    if (error) {
+    if (error || !data) {
       console.error("Failed to fetch post for voting:", error);
       return;
     }
 
+    let newVotes = data.votes;
+
+    if (hasVoted) {
+      newVotes = Math.max(0, newVotes - 1);
+      localStorage.setItem(
+        "votedPosts",
+        JSON.stringify(votedPosts.filter((id) => id !== postId))
+      );
+    } else {
+      newVotes = newVotes + 1;
+      localStorage.setItem(
+        "votedPosts",
+        JSON.stringify([...votedPosts, postId])
+      );
+    }
+
     const { error: updateError } = await supabase
       .from("posts")
-      .update({ votes: data.votes + 1 })
+      .update({ votes: newVotes })
       .eq("id", postId);
 
     if (updateError) {
-      console.error("Failed to update votes:", updateError);
+      console.error("Failed to update vote count:", updateError);
       return;
     }
-
-    localStorage.setItem("votedPosts", JSON.stringify([...votedPosts, postId]));
 
     fetchPosts();
   };
@@ -60,7 +69,17 @@ export default function PostFeed({ onSelectPost, onMount }) {
     <div className="space-y-4">
       {posts.map((post) => (
         <div key={post.id} onClick={() => onSelectPost(post)}>
-          <Post {...post} comments={[]} onVote={handleVote} />
+          <Post
+            {...post}
+            comments={[]}
+            hasVoted={
+              typeof window !== "undefined" &&
+              JSON.parse(localStorage.getItem("votedPosts") || "[]").includes(
+                post.id
+              )
+            }
+            onVoteToggle={handleVoteToggle}
+          />
         </div>
       ))}
     </div>
