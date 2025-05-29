@@ -14,6 +14,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyContent, setReplyContent] = useState("");
   const [replyName, setReplyName] = useState("Anonymous");
+  const [expandedComments, setExpandedComments] = useState(new Set());
 
   useEffect(() => {
     if (post?.id) fetchComments();
@@ -91,6 +92,10 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     setReplyContent("");
     setReplyName("Anonymous");
     setReplyingTo(null);
+    
+    // Auto-expand the comment that was replied to
+    setExpandedComments(prev => new Set([...prev, replyingTo]));
+    
     fetchComments();
   };
 
@@ -102,6 +107,18 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     setReplyingTo(null);
     setReplyContent("");
     setReplyName("Anonymous");
+  };
+
+  const toggleReplies = (commentId) => {
+    setExpandedComments(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(commentId)) {
+        newSet.delete(commentId);
+      } else {
+        newSet.add(commentId);
+      }
+      return newSet;
+    });
   };
 
   if (!isOpen || !post) return null;
@@ -171,87 +188,114 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
 
           {comments.length > 0 ? (
             <div className="space-y-3">
-              {comments.map((comment) => (
-                <div key={comment.id} className="space-y-2">
-                  {/* Top-level comment */}
-                  <Comment
-                    id={comment.id}
-                    content={comment.content}
-                    votes={comment.votes}
-                    name={comment.name || "Anonymous"}
-                    time={comment.created_at}
-                    parent_id={comment.parent_id}
-                    hasVoted={hasVoted("comments", comment.id)}
-                    onVoteToggle={async () => {
-                      await toggleVote("comments", comment.id);
-                      fetchComments();
-                    }}
-                    onReply={handleReply}
-                  />
-                  
-                  {/* Reply form for this comment */}
-                  {replyingTo === comment.id && (
-                    <div className="ml-8 space-y-2 p-3 bg-gray-50 rounded border">
-                      <div className="flex gap-2">
-                        <input
-                          value={replyName}
-                          onChange={(e) => setReplyName(e.target.value)}
-                          placeholder="Anonymous"
-                          className="w-32 border rounded px-2 py-1 text-sm"
-                          maxLength={50}
-                        />
-                        <input
-                          value={replyContent}
-                          onChange={(e) => setReplyContent(e.target.value)}
-                          placeholder="Write a reply..."
-                          className="flex-1 border rounded px-2 py-1 text-sm"
-                          autoFocus
-                        />
+              {comments.map((comment) => {
+                const isExpanded = expandedComments.has(comment.id);
+                const hasReplies = comment.replies && comment.replies.length > 0;
+                
+                return (
+                  <div key={comment.id} className="space-y-2">
+                    {/* Top-level comment */}
+                    <Comment
+                      id={comment.id}
+                      content={comment.content}
+                      votes={comment.votes}
+                      name={comment.name || "Anonymous"}
+                      time={comment.created_at}
+                      parent_id={comment.parent_id}
+                      hasVoted={hasVoted("comments", comment.id)}
+                      onVoteToggle={async () => {
+                        await toggleVote("comments", comment.id);
+                        fetchComments();
+                      }}
+                      onReply={handleReply}
+                    />
+                    
+                    {/* Show/Hide replies toggle */}
+                    {hasReplies && (
+                      <div className="ml-12">
+                        <button
+                          onClick={() => toggleReplies(comment.id)}
+                          className="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+                        >
+                          {isExpanded ? (
+                            <>
+                              <span>▼</span>
+                              <span>Hide replies</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>▶</span>
+                              <span>Show {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}</span>
+                            </>
+                          )}
+                        </button>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <p className="text-xs text-gray-500">Replying to {comment.name || "Anonymous"}</p>
+                    )}
+                    
+                    {/* Reply form for this comment */}
+                    {replyingTo === comment.id && (
+                      <div className="ml-8 space-y-2 p-3 bg-gray-50 rounded border">
                         <div className="flex gap-2">
-                          <button
-                            onClick={cancelReply}
-                            className="text-xs px-2 py-1 text-gray-600 hover:text-gray-800"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            onClick={handleAddReply}
-                            className="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700"
-                          >
-                            Reply
-                          </button>
+                          <input
+                            value={replyName}
+                            onChange={(e) => setReplyName(e.target.value)}
+                            placeholder="Anonymous"
+                            className="w-32 border rounded px-2 py-1 text-sm"
+                            maxLength={50}
+                          />
+                          <input
+                            value={replyContent}
+                            onChange={(e) => setReplyContent(e.target.value)}
+                            placeholder="Write a reply..."
+                            className="flex-1 border rounded px-2 py-1 text-sm"
+                            autoFocus
+                          />
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p className="text-xs text-gray-500">Replying to {comment.name || "Anonymous"}</p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={cancelReply}
+                              className="text-xs px-2 py-1 text-gray-600 hover:text-gray-800"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleAddReply}
+                              className="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700"
+                            >
+                              Reply
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                  
-                  {/* Replies to this comment */}
-                  {comment.replies && comment.replies.length > 0 && (
-                    <div className="space-y-2">
-                      {comment.replies.map((reply) => (
-                        <Comment
-                          key={reply.id}
-                          id={reply.id}
-                          content={reply.content}
-                          votes={reply.votes}
-                          name={reply.name || "Anonymous"}
-                          time={reply.created_at}
-                          parent_id={reply.parent_id}
-                          hasVoted={hasVoted("comments", reply.id)}
-                          onVoteToggle={async () => {
-                            await toggleVote("comments", reply.id);
-                            fetchComments();
-                          }}
-                          // No onReply for replies (flat structure)
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                    
+                    {/* Replies to this comment (only show when expanded) */}
+                    {hasReplies && isExpanded && (
+                      <div className="space-y-2">
+                        {comment.replies.map((reply) => (
+                          <Comment
+                            key={reply.id}
+                            id={reply.id}
+                            content={reply.content}
+                            votes={reply.votes}
+                            name={reply.name || "Anonymous"}
+                            time={reply.created_at}
+                            parent_id={reply.parent_id}
+                            hasVoted={hasVoted("comments", reply.id)}
+                            onVoteToggle={async () => {
+                              await toggleVote("comments", reply.id);
+                              fetchComments();
+                            }}
+                            // No onReply for replies (flat structure)
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-sm text-gray-500 italic">No comments yet.</p>
