@@ -5,7 +5,12 @@ import { supabase } from "@/lib/supabaseClient";
 import Post from "@/components/post/Post";
 import { toggleVote, hasVoted } from "@/lib/voteUtils";
 
-export default function PostFeed({ sort, onSelectPost, onMount }) {
+export default function PostFeed({
+  sort,
+  searchQuery = "",
+  onSelectPost,
+  onMount,
+}) {
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
@@ -66,9 +71,17 @@ export default function PostFeed({ sort, onSelectPost, onMount }) {
     if (onMount) onMount(fetchPosts);
   }, [sort]);
 
+  const filteredPosts = posts.filter((post) => {
+    const lower = searchQuery.toLowerCase();
+    return (
+      post.title.toLowerCase().includes(lower) ||
+      post.body?.toLowerCase().includes(lower)
+    );
+  });
+
   return (
     <div className="space-y-4">
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <div key={post.id} onClick={() => onSelectPost(post)}>
           <Post
             {...post}

@@ -12,6 +12,7 @@ export default function HomePage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [sort, setSort] = useState("New");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const refreshPostsRef = useRef(() => {});
 
@@ -24,9 +25,12 @@ export default function HomePage() {
           onPostClick={() => setIsCreateModalOpen(true)}
           sort={sort}
           setSort={setSort}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
         />
         <PostFeed
           sort={sort}
+          searchQuery={searchQuery}
           onSelectPost={setSelectedPost}
           onMount={(refreshFn) => (refreshPostsRef.current = refreshFn)}
         />
