@@ -61,6 +61,9 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
 
         <div className="flex items-center text-sm text-gray-500 gap-4">
           <div>
+            <span className="text-gray-700 font-medium">{post.name || "Anonymous"}</span>
+          </div>
+          <div>
             <span className="font-medium text-gray-900">{post.votes}</span>{" "}
             upvotes
           </div>

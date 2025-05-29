@@ -15,6 +15,7 @@ export default function CreatePostModal({ isOpen, onClose }) {
 
     const title = e.target.title.value.trim();
     const body = e.target.body.value.trim();
+    const name = e.target.name.value.trim() || "Anonymous";
 
     if (!title || !body) {
       setError("Both title and body are required.");
@@ -22,7 +23,7 @@ export default function CreatePostModal({ isOpen, onClose }) {
       return;
     }
 
-    const { error } = await supabase.from("posts").insert([{ title, body }]);
+    const { error } = await supabase.from("posts").insert([{ title, body, name }]);
 
     setLoading(false);
 
@@ -41,6 +42,21 @@ export default function CreatePostModal({ isOpen, onClose }) {
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Name
+          </label>
+          <input
+            name="name"
+            type="text"
+            placeholder="Anonymous"
+            defaultValue="Anonymous"
+            className="w-full border rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+            maxLength={50}
+          />
+          <p className="text-xs text-gray-500 mt-1">Leave blank to post as Anonymous</p>
+        </div>
+
         <div>
           <label className="block text-sm font-medium mb-1">
             Title <span className="text-red-500">*</span>

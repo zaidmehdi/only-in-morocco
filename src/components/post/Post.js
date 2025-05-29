@@ -12,6 +12,7 @@ export default function Post({
   body,
   votes,
   time,
+  name = "Anonymous",
   commentCount = 0,
   onVoteToggle,
   hasVoted,
@@ -36,6 +37,8 @@ export default function Post({
         <p className="text-sm text-gray-600 line-clamp-2">{body}</p>
 
         <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+          <span className="text-gray-700 font-medium">{name}</span>
+          <span>·</span>
           <span role="img">🇲🇦</span>
           <span>Morocco</span>
           <span>·</span>
