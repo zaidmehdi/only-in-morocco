@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
-import AnnouncementBox from "@/components/AnnouncementBox";
-import FeedHeader from "@/components/FeedHeader";
-import PostFeed from "@/components/PostFeed";
-import CreatePostModal from "@/components/modals/CreatePostModal";
-import ViewPostModal from "@/components/modals/ViewPostModal";
+import Navbar from "@/components/layout/Navbar";
+import AnnouncementBox from "@/components/layout/AnnouncementBox";
+import FeedHeader from "@/components/layout/FeedHeader";
+import PostFeed from "@/components/layout/PostFeed";
+import CreatePostModal from "@/components/modal/CreatePostModal";
+import ViewPostModal from "@/components/modal/ViewPostModal";
 
 export default function HomePage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);

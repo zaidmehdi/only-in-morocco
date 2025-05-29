@@ -1,4 +1,4 @@
-import Post from "@/components/Post";
+import Post from "@/components/post/Post";
 
 export default function PostFeed({ onSelectPost }) {
   const posts = [
