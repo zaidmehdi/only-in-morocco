@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 export default function SearchBar({ value, onChange }) {
   return (
     <div className="relative flex-1 sm:w-64">

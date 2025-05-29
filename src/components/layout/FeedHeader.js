@@ -1,3 +1,5 @@
+"use client";
+
 import SortTabs from "../ui/SortTabs";
 import SearchBar from "../ui/SearchBar";
 import PostButton from "../post/PostButton";

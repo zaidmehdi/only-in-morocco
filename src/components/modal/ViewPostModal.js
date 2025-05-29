@@ -8,8 +8,6 @@ import { toggleVote, hasVoted } from "@/lib/voteUtils";
 import { formatDistanceToNow } from "date-fns";
 
 export default function ViewPostModal({ isOpen, onClose, post }) {
-  if (!isOpen || !post) return null;
-
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
@@ -18,6 +16,8 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   }, [post]);
 
   const fetchComments = async () => {
+    if (!post?.id) return;
+    
     const { data, error } = await supabase
       .from("comments")
       .select("*")
@@ -29,7 +29,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   };
 
   const handleAddComment = async () => {
-    if (!newComment.trim()) return;
+    if (!newComment.trim() || !post?.id) return;
 
     const { error } = await supabase.from("comments").insert([
       {
@@ -46,6 +46,8 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     setNewComment("");
     fetchComments();
   };
+
+  if (!isOpen || !post) return null;
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
