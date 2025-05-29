@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -19,17 +20,21 @@ export default function Navbar() {
               <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mr-2 overflow-hidden rounded-full border sm:h-9 sm:w-9 dark:bg-gray-800 dark:border-gray-600">
                 <span className="inline-block overflow-hidden relative max-w-full">
                   <span className="block max-w-full">
-                    <img
+                    <Image
                       alt=""
                       aria-hidden="true"
                       src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2736%27%20height=%2736%27/%3e"
                       className="block max-w-full"
+                      width={36}
+                      height={36}
                     />
                   </span>
-                  <img
+                  <Image
                     alt="profile_pic"
                     src="/morocco_flag.svg"
                     className="absolute inset-0 box-border p-0 m-auto block w-0 h-0 min-w-full max-w-full min-h-full max-h-full object-cover rounded-full"
+                    width={36}
+                    height={36}
                   />
                 </span>
               </div>

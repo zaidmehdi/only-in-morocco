@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import BaseModal from "./BaseModal";
 import Comment from "@/components/comment/Comment";
@@ -16,11 +16,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
   const [replyName, setReplyName] = useState("Anonymous");
   const [expandedComments, setExpandedComments] = useState(new Set());
 
-  useEffect(() => {
-    if (post?.id) fetchComments();
-  }, [post]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     if (!post?.id) return;
     
     const { data, error } = await supabase
@@ -44,7 +40,11 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
     } else {
       console.error("Failed to load comments:", error);
     }
-  };
+  }, [post?.id]);
+
+  useEffect(() => {
+    if (post?.id) fetchComments();
+  }, [post?.id, fetchComments]);
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !post?.id) return;

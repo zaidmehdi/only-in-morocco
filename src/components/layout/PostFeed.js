@@ -19,7 +19,7 @@ export default function PostFeed({
 
   const POSTS_PER_PAGE = 10;
 
-  const fetchPosts = async (pageNum = 0, isNewSearch = false) => {
+  const fetchPosts = useCallback(async (pageNum = 0, isNewSearch = false) => {
     if (loading) return;
     setLoading(true);
 
@@ -74,7 +74,7 @@ export default function PostFeed({
     } finally {
       setLoading(false);
     }
-  };
+  }, [loading, sort]);
 
   const loadMore = useCallback(() => {
     if (hasMore && !loading) {
@@ -82,7 +82,7 @@ export default function PostFeed({
       setPage(nextPage);
       fetchPosts(nextPage, false);
     }
-  }, [page, hasMore, loading]);
+  }, [page, hasMore, loading, fetchPosts]);
 
   // Intersection Observer for infinite scroll
   const lastPostElementRef = useCallback(node => {
@@ -107,7 +107,7 @@ export default function PostFeed({
       setHasMore(true);
       fetchPosts(0, true);
     });
-  }, [sort]);
+  }, [sort, fetchPosts, onMount]);
 
   const filteredPosts = posts.filter((post) => {
     if (!searchQuery) return true;
