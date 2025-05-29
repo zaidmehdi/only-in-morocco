@@ -17,6 +17,30 @@ export default function PostFeed({ onSelectPost, onMount }) {
     else console.error("Failed to load posts:", error);
   };
 
+  const handleVote = async (postId) => {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("votes")
+      .eq("id", postId)
+      .single();
+
+    if (error) {
+      console.error("Failed to fetch post for voting:", error);
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from("posts")
+      .update({ votes: data.votes + 1 })
+      .eq("id", postId);
+
+    if (updateError) {
+      console.error("Failed to update votes:", updateError);
+    } else {
+      fetchPosts();
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
     if (onMount) onMount(fetchPosts);
@@ -26,7 +50,7 @@ export default function PostFeed({ onSelectPost, onMount }) {
     <div className="space-y-4">
       {posts.map((post) => (
         <div key={post.id} onClick={() => onSelectPost(post)}>
-          <Post {...post} comments={[]} />
+          <Post {...post} comments={[]} onVote={handleVote} />
         </div>
       ))}
     </div>
