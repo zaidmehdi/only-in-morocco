@@ -1,27 +1,31 @@
 import Post from "@/components/Post";
 
-export default function PostFeed() {
+export default function PostFeed({ onSelectPost }) {
   const posts = [
     {
       id: 1,
-      title: "Test",
+      title: "test",
       body: "test",
       votes: 38,
-      time: "about 11 hours ago",
+      date: "11 hours ago",
+      comments: [],
     },
     {
       id: 2,
-      title: "Test",
+      title: "test",
       body: "test again",
       votes: 3,
-      time: "about 11 hours ago",
+      date: "11 hours ago",
+      comments: ["Exactly my thoughts", "This needs more visibility"],
     },
   ];
 
   return (
     <div>
       {posts.map((post) => (
-        <Post key={post.id} {...post} />
+        <div key={post.id} onClick={() => onSelectPost(post)}>
+          <Post {...post} />
+        </div>
       ))}
     </div>
   );
