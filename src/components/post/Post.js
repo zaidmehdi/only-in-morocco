@@ -2,6 +2,7 @@ import {
   ChevronUpIcon,
   ChatBubbleOvalLeftEllipsisIcon,
 } from "@heroicons/react/20/solid";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Post({
   id,
@@ -9,7 +10,6 @@ export default function Post({
   body,
   votes,
   time,
-  comments = [],
   commentCount = 0,
   onVoteToggle,
   hasVoted,
@@ -37,7 +37,9 @@ export default function Post({
           <span role="img">🇲🇦</span>
           <span>Morocco</span>
           <span>·</span>
-          <span>{time}</span>
+          <span>
+            {formatDistanceToNow(new Date(time), { addSuffix: true })}{" "}
+          </span>
         </div>
 
         <div className="absolute right-4 bottom-3 flex items-center gap-1 text-xs text-gray-400">

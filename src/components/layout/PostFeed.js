@@ -47,7 +47,7 @@ export default function PostFeed({ onSelectPost, onMount }) {
         <div key={post.id} onClick={() => onSelectPost(post)}>
           <Post
             {...post}
-            comments={[]}
+            time={post.created_at}
             hasVoted={hasVoted("posts", post.id)}
             onVoteToggle={async () => {
               await toggleVote("posts", post.id);

@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabaseClient";
 import BaseModal from "./BaseModal";
 import Comment from "@/components/comment/Comment";
 import { toggleVote, hasVoted } from "@/lib/voteUtils";
+import { formatDistanceToNow } from "date-fns";
 
 export default function ViewPostModal({ isOpen, onClose, post }) {
   if (!isOpen || !post) return null;
@@ -62,7 +63,11 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
             upvotes
           </div>
           <div>
-            Posted on <span className="text-gray-700">{post.date}</span>
+            <span className="text-gray-700">
+              {formatDistanceToNow(new Date(post.created_at), {
+                addSuffix: true,
+              })}
+            </span>
           </div>
         </div>
 
