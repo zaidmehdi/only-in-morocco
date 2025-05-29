@@ -126,6 +126,7 @@ export default function ViewPostModal({ isOpen, onClose, post }) {
                   content={comment.content}
                   votes={comment.votes}
                   name={comment.name || "Anonymous"}
+                  time={comment.created_at}
                   hasVoted={hasVoted("comments", comment.id)}
                   onVoteToggle={async () => {
                     await toggleVote("comments", comment.id);
