@@ -10,6 +10,7 @@ export default function Post({
   votes,
   time,
   comments = [],
+  commentCount = 0,
   onVoteToggle,
   hasVoted,
 }) {
@@ -41,7 +42,7 @@ export default function Post({
 
         <div className="absolute right-4 bottom-3 flex items-center gap-1 text-xs text-gray-400">
           <ChatBubbleOvalLeftEllipsisIcon className="w-4 h-4" />
-          <span>{comments.length}</span>
+          <span>{commentCount}</span>
         </div>
       </div>
     </div>

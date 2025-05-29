@@ -36,7 +36,10 @@ export default function HomePage() {
 
       <ViewPostModal
         isOpen={!!selectedPost}
-        onClose={() => setSelectedPost(null)}
+        onClose={() => {
+          setSelectedPost(null);
+          refreshPostsRef.current();
+        }}
         post={selectedPost}
       />
     </>
