@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Navbar() {
   return (
     <div className="px-3 sm:px-4 bg-white border-b border-gray-100/40 md:px-6 xl:px-0">
-      <div className="max-w-5xl py-3 sm:py-4 pb-0 mx-auto">
+      <div className="max-w-5xl py-3 sm:py-4 mx-auto">
         <div className="flex items-center justify-between">
           <div className="inline-flex items-center flex-1 w-full mr-2 sm:mr-3 truncate">
             <div className="inline-flex items-center max-w-full truncate">
