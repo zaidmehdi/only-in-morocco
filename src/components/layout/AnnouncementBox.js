@@ -5,7 +5,7 @@ export default function AnnouncementBox() {
         🇲🇦 Tell your Morocco story
       </h2>
 
-      <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-red-800">
+      <div className="space-y-3 sm:space-y-4 text-red-800">
         <p>We love Morocco ❤️</p>
         <p>
           But there are also those times: the four-hour wait for a five-minute
